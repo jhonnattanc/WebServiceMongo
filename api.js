@@ -3,8 +3,16 @@ var express = require('express');
 var router = express.Router(); 
 var TaskModel = require('./task_schema'); 
 
+environment = {
+    DBMONGOUSER: process.env.DBMONGOUSER,
+    DBMONGOPASS: process.env.DBMONGOPASS,
+    DBMONGOSERV: process.env.DBMONGOSERV,
+    DBMONGO: process.env.DBMONGO,
+};
+
 // Connecting to database 
-var query = "mongodb+srv://usertestmongog2:TesT123456@webservice.ag2r7.mongodb.net/pstigrupo2?retryWrites=true&w=majority"
+var query = 'mongodb+srv://' + environment.DBMONGOUSER + ':' + environment.DBMONGOPASS + '@' + environment.DBMONGOSERV + '/' + environment.DBMONGO + '?retryWrites=true&w=majority';
+
 
 const db = (query); 
 mongoose.Promise = global.Promise; 
