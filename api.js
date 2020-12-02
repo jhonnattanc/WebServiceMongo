@@ -3,6 +3,14 @@ var express = require('express');
 var router = express.Router(); 
 var TaskModel = require('./task_schema'); 
 
+let environment = null;
+
+if (!process.env.ON_HEROKU) {
+    console.log("Cargando variables de entorno desde archivo");
+    const env = require('node-env-file');
+    env(__dirname + '/.env');
+}
+
 environment = {
     DBMONGOUSER: process.env.DBMONGOUSER,
     DBMONGOPASS: process.env.DBMONGOPASS,
@@ -10,6 +18,7 @@ environment = {
     DBMONGO: process.env.DBMONGO,
 };
 
+console.log(environment);
 // Connecting to database 
 var query = 'mongodb+srv://' + environment.DBMONGOUSER + ':' + environment.DBMONGOPASS + '@' + environment.DBMONGOSERV + '/' + environment.DBMONGO + '?retryWrites=true&w=majority';
 
