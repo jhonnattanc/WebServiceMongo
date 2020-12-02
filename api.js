@@ -18,44 +18,71 @@ useUnifiedTopology: true }, function(error) {
     }
 }); 
 
-router.get('/findall', function(req, res) {
-    TaskModel.find(function(err, data) {
-        if(err){
+router.get('/all-tasks', function (req, res) {
+    TaskModel.find(function (err, data) {
+        if (err) {
             console.log(err);
         }
-        else{
+        else {
             res.send(data);
         }
-    });  
- });
+    });
+});
 
- router.post('/delete', function(req, res) {
-    TasktModel.findByIdAndDelete((req.body.TaskId), 
-    function(err, data) {
-        if(err){
+router.get('/get-task/:TaskId', function (req, res) {
+    TaskModel.findOne({TaskId: req.params.TaskId}, function (err, data) {
+        if (err) {
             console.log(err);
+            res.send("Internal error");
         }
-        else{
+        else {
+            res.send(data);
+        }
+    });
+});
+
+
+router.delete('/delete-task', function (req, res) {
+
+    TaskModel.deleteOne({TaskId: req.body.TaskId}, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
             res.send(data);
             console.log("Data Deleted!");
         }
-    });  
+    });
 });
 
-router.post('/save', function(req, res) {
+router.post('/update-task', function (req, res) {
+    TaskModel.updateOne({TaskId: req.body.TaskId}, {
+        Name: req.body.Name,
+        Deadline: req.body.Deadline
+    }, function (err, data) {
+        if (err) {
+            res.send("Internal error");
+            console.log(err);
+        } else {
+            res.send(data);
+            console.log("Data updated!");
+        }
+    });
+});
+
+router.post('/create-task', function (req, res) {
     let task_id = req.body.TaskId;
     let name = req.body.Name;
     let deadline = req.body.Deadline;
 
     let task = {
-        TaskId: task_id, 
-        Name: name,  
+        TaskId: task_id,
+        Name: name,
         Deadline: deadline
     }
     var newTask = new TaskModel(task);
 
-    newTask.save(function(err, data) {
-        if(err) {
+    newTask.save(function (err, data) {
+        if (err) {
             console.log(error);
         }
         else {
